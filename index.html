@@ -1,0 +1,352 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculator</title>
+
+    <!-- Browser Tab Icon -->
+    <link rel="icon" type="image/png" href="calculator.png">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f2f2f2;
+        }
+        .calculator {
+            width: 360px;
+            padding: 20px;
+            background: #565965;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #display {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 18px;
+            background: #c4df9b;
+            color: #222;
+            font-size: 40px;
+            text-align: right;
+            outline: none;
+        }        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        /* All buttons */
+        button {
+            height: 65px;
+            border: none;
+            border-radius: 18px;
+            background: #373a44;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+
+            /* Hover animation */
+            transition: all 0.2s ease;
+        }
+
+        /* Hover effect */
+        button:hover {
+            transform: translateY(-4px);
+            background: #0e2565;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Click effect */
+        button:active {
+            transform: scale(0.92);
+        }
+
+        /* Operator buttons */
+        .operator {
+            background: #d8d6d0;
+            color: white;
+        }
+
+        .operator:hover {
+            background: #a1c20f;
+        }
+
+        /* Clear button */
+        .clear {
+            background: #d85454;
+            color: white;
+        }
+
+        .clear:hover {
+            background: #5b0909;
+        }
+      button.key:hover{
+            transform: translateY(-4px);
+            background: #0e2565;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+
+      }
+        /* Backspace */
+        .backspace {
+            background: #e08b3e;
+            color: rgb(97, 34, 34);
+        }
+
+        .backspace:hover {
+            background: #a06931;
+        }
+
+        /* Equal button */
+        .equal {
+            background: #578ec4;
+            color: white;
+        }
+
+        .equal:hover {
+            background: #727a82;
+        }
+
+        /* Zero button */
+        .zero {
+            grid-column: span 2;
+        }
+
+        /* Mobile */
+        @media (max-width: 400px) {
+
+            .calculator {
+                width: 92%;
+            }
+
+            button {
+                height: 60px;
+            }
+            button.press {
+    transform: scale(0.92);
+    background: #666;
+    box-shadow: 0 2px 5px #000;
+}
+
+
+
+            #display {
+                height: 70px;
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        
+        <input type="text" id="display" value="0" readonly>
+
+    
+        <div class="buttons">
+
+            <!-- First row -->
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="backspace" onclick="backspace()">⌫</button>
+            <button class="operator" onclick="addOperator('÷')">÷</button>
+            <button class="operator" onclick="addOperator('×')">×</button>
+
+            <!-- Second row -->
+            <button onclick="addNumber('7')">7</button>
+            <button onclick="addNumber('8')">8</button>
+            <button onclick="addNumber('9')">9</button>
+            <button class="operator" onclick="addOperator('−')">−</button>
+
+            <!-- Third row -->
+            <button onclick="addNumber('4')">4</button>
+            <button onclick="addNumber('5')">5</button>
+            <button onclick="addNumber('6')">6</button>
+            <button class="operator" onclick="addOperator('+')">+</button>
+
+            <!-- Fourth row -->
+            <button onclick="addNumber('3')">3</button>
+            <button onclick="addNumber('2')">2</button>
+            <button onclick="addNumber('1')">1</button>
+            <button class="equal" onclick="calculate()">=</button>
+
+            <!-- Fifth row -->
+            <button class="zero" onclick="addNumber('0')">0</button>
+            <button onclick="addNumber('00')">00</button>
+            <button onclick="addNumber('.')">.</button>
+
+        </div>
+    </div>
+
+
+    <script>
+
+        let display = document.getElementById("display");
+
+        // Add numbers
+        function addNumber(number) {
+
+            if (display.value === "0" || display.value === "Error") {
+
+                if (number === ".") {
+                    display.value = "0.";
+                }
+                else {
+                    display.value = number;
+                }
+
+            }
+            else {
+                if (number === "." && display.value.slice(-1) === ".") {
+                    return;
+                }
+
+                display.value += number;
+            }
+        }
+
+
+        // Add operator
+        function addOperator(operator) {
+
+            if (display.value === "Error") {
+                display.value = "0";
+            }
+
+            let lastCharacter =
+                display.value.slice(-1);
+
+            // Prevent two operators together
+            if (
+                lastCharacter === "+" ||
+                lastCharacter === "−" ||
+                lastCharacter === "×" ||
+                lastCharacter === "÷"
+            ) {
+                display.value =
+                    display.value.slice(0, -1) + operator;
+            }
+            else {
+                display.value += operator;
+            }
+        }
+        function clearDisplay() {
+            display.value = "0";
+        }
+        function backspace() {
+
+            if (
+                display.value.length <= 1 ||
+                display.value === "Error"
+            ) {
+                display.value = "0";
+            }
+            else {
+                display.value =
+                    display.value.slice(0, -1);
+            }
+        }
+        function calculate() {
+           try {
+
+                let expression = display.value;
+
+                // Convert calculator symbols to JavaScript operators
+                expression = expression
+                    .replace(/×/g, "*")
+                    .replace(/÷/g, "/")
+                    .replace(/−/g, "-");
+
+                if (!expression) {
+                    display.value = "0";
+                    return;
+                }
+
+                let result = Function(
+                    "return " + expression
+                )();
+
+                if (!isFinite(result)) {
+                    display.value = "Error";
+                }
+                else {
+                    display.value = result;
+                }
+
+            }
+            catch {
+                display.value = "Error";
+            }
+        }
+
+
+        // Keyboard support
+        document.addEventListener("keydown", function(event) {
+
+            let key = event.key;
+
+            // Numbers
+            if (key >= "0" && key <= "9") {
+                addNumber(key);
+            }
+
+            
+            else if (key === ".") {
+                addNumber(".");
+            }
+
+            // Operators
+            else if (key === "+") {
+                addOperator("+");
+            }
+
+            else if (key === "-") {
+                addOperator("−");
+            }
+
+            else if (key === "*") {
+                addOperator("×");
+            }
+
+            else if (key === "/") {
+                event.preventDefault();
+                addOperator("÷");
+            }
+
+            // Enter
+            else if (key === "Enter" || key === "=") {
+                calculate();
+            }
+            else if (key === "Backspace") {
+                backspace();
+            }
+
+            else if (key === "Escape") {
+                clearDisplay();
+            }else if(key==="Delete"){
+              clearDisplay();
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
+
